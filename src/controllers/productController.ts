@@ -6,7 +6,6 @@ export const getProducts = async (req: Request, res: Response) => {
     try {
         const products = await getProductsByStoreId(parseInt(storeId));
 
-        // Verifica si hay productos
         if (Array.isArray(products) && products.length > 0) {
             res.json(products);
         } else {

@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { getProducts } from '../controllers/productController';
 
-const routerProduct = Router();
+const router = Router();
+router.get('/:storeId', getProducts);
 
-routerProduct.get('/:storeId', getProducts);
-
-export default routerProduct;
+export default router;

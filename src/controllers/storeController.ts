@@ -13,12 +13,12 @@ export const getStores = async (req: Request, res: Response) => {
 export const getStore = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-    const store = await getStoreById(parseInt(id));
-    if (store) {
-        res.json(store);
-    } else {
-        res.status(404).json({ error: 'Almacén no encontrado' });
-    }
+        const store = await getStoreById(parseInt(id));
+        if (store) {
+            res.json(store);
+        } else {
+            res.status(404).json({ error: 'Almacén no encontrado' });
+        }
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener el almacén' });
     }

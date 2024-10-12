@@ -1,9 +1,8 @@
 import { Router } from 'express';
 import { getStores, getStore } from '../controllers/storeController';
 
-const routerStores = Router();
+const router = Router();
+router.get('/', getStores);
+router.get('/:id', getStore);
 
-routerStores.get('/', getStores); // Ruta para obtener todos los almacenes
-routerStores.get('/:id', getStore); // Ruta para obtener un almacén por su ID
-
-export default routerStores;
+export default router;
