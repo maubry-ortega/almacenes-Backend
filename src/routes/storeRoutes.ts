@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { getStores, getStore } from '../controllers/storeController';
+import express from 'express';
+import { getStores, getStoreById } from '../controllers/storeController';
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', getStores); // Obtener todos los almacenes
-router.get('/:id', getStore); // Obtener un almacén por su ID
+router.get('/stores', getStores); // Obtener todos los almacenes
+router.get('/stores/:id', getStoreById); // Obtener un almacén específico
 
 export default router;

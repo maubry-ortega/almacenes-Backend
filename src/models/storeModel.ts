@@ -1,26 +1,15 @@
-import pool from '../config/db';
+import { RowDataPacket } from 'mysql2/promise';
+import { connection } from '../services/db';
 
 // Función para obtener todos los almacenes
-export const getAllStores = async () => {
-    const [rows]: any = await pool.query('SELECT * FROM stores');
-    return rows;
+export const fetchStores = async () => {
+  // Asegúrate de que la función devuelva un array de RowDataPacket
+  const [rows] = await connection.execute<RowDataPacket[]>('SELECT * FROM stores');
+  return rows;
 };
 
-// Función para obtener un almacén por su ID y los productos asociados
-export const getStoreById = async (id: number) => {
-    const [storeRows]: any = await pool.query('SELECT * FROM stores WHERE id = ?', [id]);
-
-    if (storeRows.length === 0) {
-        return null;
-    }
-
-    const [productRows]: any = await pool.query('SELECT * FROM products WHERE store_id = ?', [id]);
-
-    const storeWithProducts = {
-        id: storeRows[0].id,
-        nombre: storeRows[0].nombre,
-        productos: productRows,
-    };
-
-    return storeWithProducts;
+// Función para obtener un almacén por su ID
+export const fetchStoreById = async (id: number) => {
+  const [rows] = await connection.execute<RowDataPacket[]>('SELECT * FROM stores WHERE id = ?', [id]);
+  return rows.length > 0 ? rows[0] : null;
 };
