@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getAllStores, getStoreById } from '../models/storeModel';
 
+// Obtener todos los almacenes
 export const getStores = async (req: Request, res: Response) => {
     try {
         const stores = await getAllStores();
@@ -10,6 +11,7 @@ export const getStores = async (req: Request, res: Response) => {
     }
 };
 
+// Obtener un almacén por su ID
 export const getStore = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
