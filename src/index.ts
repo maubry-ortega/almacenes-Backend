@@ -19,7 +19,6 @@ app.use(express.json());
 app.use(routerProduct);
 
 app.use('/api/stores', routerStores);
-app.use('/api/products', routerProduct);
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);

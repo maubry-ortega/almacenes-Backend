@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../config/db'; // Asegúrate de importar tu configuración de base de datos
+import pool from '../config/db'; 
 
 // Función para obtener productos por ID de almacén
 const getProductsByStore = async (req: Request, res: Response) => {
