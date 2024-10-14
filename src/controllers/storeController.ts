@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllStores, getStoreById } from '../models/storeModel';
-import { createStore } from '../models/storeModel';
+import { getAllStores, getStoreById, createStore, UpdateStore } from '../models/storeModel';
 
 // Controlador para obtener todos los almacenes
 export const getStoresC = async (req: Request, res: Response): Promise<void> => {
@@ -43,5 +42,28 @@ export const createStoreC = async (req: Request, res: Response): Promise<void> =
     res.status(201).json({ message: "Almacén creado", newStore });
   } catch ( error ) {
     res.status(500).json({ error: "Error al crear el almacén" });
+  }
+}
+
+//controlador para actalizar un almacen
+export const updateStoreC = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  if (!name){
+    res.status(400).json({ error: 'El campo name es obligatorio' });
+    return;
+  }
+
+  try {
+    const updateStore = await UpdateStore({ id: parseInt(id, 10), name });
+
+    if(!updateStore){
+      res.status(404).json({error: "Almacen no encontrato"});
+    } else {
+      res.status(200).json({ message: "Almacen actualizado", updateStore });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al actualizar" });
   }
 }

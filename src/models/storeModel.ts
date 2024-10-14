@@ -1,5 +1,5 @@
 import pool from '../config/db';
-import { OkPacket, RowDataPacket } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
 interface Store extends RowDataPacket {
   id?: number;
@@ -7,6 +7,11 @@ interface Store extends RowDataPacket {
 }
 
 interface newStore {
+  name: string;
+}
+
+interface UpdateStore {
+  id: number;
   name: string;
 }
 
@@ -23,7 +28,7 @@ export const getStoreById = async (id: number): Promise<Store | null> => {
 export const createStore = async (store: newStore): Promise<Store> => {
   const { name } = store;
 
-  const [ result ] = await pool.query<OkPacket>(
+  const [ result ] = await pool.query<ResultSetHeader>(
     'INSERT INTO stores (nombre) VALUES (?)',
     [name]
   );
@@ -34,5 +39,20 @@ export const createStore = async (store: newStore): Promise<Store> => {
     'SELECT * FROM stores WHERE id = ?', [newStoreId]
   );
 
+  return rows[0];
+}
+
+export const UpdateStore = async ( store: UpdateStore): Promise<Store | null> => {
+  const { id, name } = store;
+
+  const [result] = await pool.query<ResultSetHeader>(
+    'UPDATE stores SET nombre = ? WHERE id = ?',[name, id]
+  );
+
+  if (result.affectedRows === 0) return null;
+
+  const [rows] = await pool.query<Store[]>(
+    'SELECT * FROM stores WHERE id = ?', [id]
+  );
   return rows[0];
 }
