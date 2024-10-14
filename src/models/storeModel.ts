@@ -1,10 +1,13 @@
 import pool from '../config/db';
-import { RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 
 interface Store extends RowDataPacket {
-  id: number;
+  id?: number;
   name: string;
-  location: string;
+}
+
+interface newStore {
+  name: string;
 }
 
 export const getAllStores = async (): Promise<Store[]> => {
@@ -16,3 +19,20 @@ export const getStoreById = async (id: number): Promise<Store | null> => {
   const [rows] = await pool.query<Store[]>('SELECT * FROM stores WHERE id = ?', [id]);
   return rows[0] || null;
 };
+
+export const createStore = async (store: newStore): Promise<Store> => {
+  const { name } = store;
+
+  const [ result ] = await pool.query<OkPacket>(
+    'INSERT INTO stores (nombre) VALUES (?)',
+    [name]
+  );
+
+  const newStoreId = result.insertId;
+
+  const [rows] = await pool.query<Store[]>(
+    'SELECT * FROM stores WHERE id = ?', [newStoreId]
+  );
+
+  return rows[0];
+}

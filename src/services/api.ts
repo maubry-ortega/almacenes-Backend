@@ -1,4 +1,4 @@
-import { fetchStores as fetchAllStores, fetchStoreById as fetchStore } from '../models/storeModel';
+import { getAllStores as fetchAllStores, getStoreById as fetchStore } from '../models/storeModel';
 
 export const fetchStores = async () => {
   return await fetchAllStores();

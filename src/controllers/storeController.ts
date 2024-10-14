@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { getAllStores, getStoreById } from '../models/storeModel';
+import { createStore } from '../models/storeModel';
 
 // Controlador para obtener todos los almacenes
-export const getStores = async (req: Request, res: Response): Promise<void> => {
+export const getStoresC = async (req: Request, res: Response): Promise<void> => {
   try {
     const stores = await getAllStores();
     res.json(stores);
@@ -12,7 +13,7 @@ export const getStores = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Controlador para obtener un almacén por ID
-export const getStore = async (req: Request, res: Response): Promise<void> => {
+export const getStoreC = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -27,3 +28,20 @@ export const getStore = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: 'Error al obtener el almacén' });
   }
 };
+
+//controlasor para crear un almacén
+export const createStoreC = async (req: Request, res: Response): Promise<void> => {
+  const {  name } = req.body;
+
+  if( !name ){
+    res.status(400).json({ error: "Faltan datos oblicatorios" });
+    return;
+  }
+
+  try {
+    const newStore = await createStore({ name });
+    res.status(201).json({ message: "Almacén creado", newStore });
+  } catch ( error ) {
+    res.status(500).json({ error: "Error al crear el almacén" });
+  }
+}

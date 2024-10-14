@@ -1,9 +1,10 @@
 import express from 'express';
-import { getStores, getStore } from '../controllers/storeController';
+import { getStoresC, getStoreC, createStoreC } from '../controllers/storeController';
 
 const routerStores = express.Router();
 
-routerStores.get('/', getStores);
-routerStores.get('/:id', getStore);
+routerStores.get('/', getStoresC);
+routerStores.get('/:id', getStoreC);
+routerStores.post('/', createStoreC)
 
 export default routerStores;

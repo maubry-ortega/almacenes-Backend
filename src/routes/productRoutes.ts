@@ -3,7 +3,6 @@ import { getProductsByStore } from '../controllers/productController';
 
 const routerProduct = Router();
 
-// Ruta para obtener productos por ID de almacén
-routerProduct.get('/api/products/:storeId', getProductsByStore); // Verifica que esta ruta esté definida
+routerProduct.get('/api/products/:storeId', getProductsByStore);
 
 export default routerProduct;
