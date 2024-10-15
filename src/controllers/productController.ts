@@ -1,23 +1,37 @@
-import { Request, Response } from 'express';
-import pool from '../config/db'; 
+import { Request, Response, NextFunction } from 'express';
+import pool from '../config/db';
+import { RowDataPacket } from 'mysql2';
 
-// Función para obtener productos por ID de almacén
-const getProductsByStore = async (req: Request, res: Response) => {
-  const storeId = req.params.storeId;
+interface Product extends RowDataPacket {
+  id: number;
+  name: string;
+  description: string;
+  img: string;
+  store_id: number;
+}
+
+// Controlador para obtener productos por ID de almacén
+export const getProductsByStore = async (
+  req: Request<{ storeId: string }>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { storeId } = req.params;
 
   try {
-    const [results] = await pool.query('SELECT * FROM products WHERE store_id = ?', [storeId]);
-    
-    // Aquí aseguramos que results es un array
-    if (Array.isArray(results) && results.length > 0) {
-      res.status(200).json(results);
-    } else {
-      res.status(404).json({ message: 'No se encontraron productos' });
+    const [products] = await pool.query<Product[]>(
+      'SELECT * FROM products WHERE store_id = ?',
+      [Number(storeId)]
+    );
+
+    if (products.length === 0) {
+      res.status(404).json({ error: 'No se encontraron productos para este almacén.' });
+      return; 
     }
+
+    res.json(products);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    console.error('Error al obtener productos:', error);
+    next(error);
   }
 };
-
-export { getProductsByStore };
