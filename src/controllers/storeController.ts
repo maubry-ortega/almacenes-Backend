@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { getAllStores, getStoreById, createStore, UpdateStore } from '../models/storeModel';
+import { getAllStores, getStoreById, createStore, UpdateStore, DeleteStore } from '../models/storeModel';
 
 // Controlador para obtener todos los almacenes
-export const getStoresC = async (req: Request, res: Response): Promise<void> => {
+export const getStoresC = async (_req: Request, res: Response): Promise<void> => {
   try {
     const stores = await getAllStores();
     res.json(stores);
@@ -65,5 +65,25 @@ export const updateStoreC = async (req: Request, res: Response): Promise<void> =
     }
   } catch (error) {
     res.status(500).json({ error: "Error al actualizar" });
+  }
+}
+
+//controlador para eliminar un almacen
+export const deleteStoreC = async(req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const storeId = parseInt(id, 10);
+
+    const store = await getStoreById(storeId);
+    if (!store) {
+      res.status(404).json({ error: "almacen no encontrado" });
+      return;
+    }
+
+    await DeleteStore(storeId);
+    res.status(200).json({ message: "almacen eliminado" });
+  } catch (error) {
+      res.status(500).json({ error: "error al eliminar el almacen" });
   }
 }

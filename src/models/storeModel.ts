@@ -15,6 +15,7 @@ interface UpdateStore {
   name: string;
 }
 
+
 export const getAllStores = async (): Promise<Store[]> => {
   const [rows] = await pool.query<Store[]>('SELECT * FROM stores');
   return rows;
@@ -55,4 +56,11 @@ export const UpdateStore = async ( store: UpdateStore): Promise<Store | null> =>
     'SELECT * FROM stores WHERE id = ?', [id]
   );
   return rows[0];
+}
+
+export const DeleteStore = async ( id: number ): Promise<void> => {
+
+  await pool.query(
+    'DELETE FROM stores WHERE id = ?', [id]
+  );
 }
